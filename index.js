@@ -2,29 +2,28 @@ import dotenv from 'dotenv';
 import express from 'express';
 import pg from 'pg';
 import cors from 'cors';
-
-const { Pool } = pg;
-dotenv.config();
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const app = express();
+dotenv.config();
+const { Pool } = pg;
 const port = 3000;
+
+const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use(express.static(path.join(__dirname, 'public')));
 
-// 1. CORS dan Limit (Sudah Benar)
 app.use(cors());
 app.use(express.json({ limit: '50mb' })); 
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// 2. Konfigurasi Database
-const DATABASE_URL = process.env.DATABASE_URL;
-
+// KONFIGURASI DB UNTUK VERCEL
 const pool = new Pool({
-  connectionString: DATABASE_URL,
-  ssl: false, 
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false // WAJIB untuk banyak provider DB cloud di Vercel
+  }
 });
 
 // Cek koneksi (Sudah Benar)
