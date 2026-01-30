@@ -21,7 +21,7 @@
         // Fungsi untuk mengambil data
         async function loadVideos() {
             try {
-                const response = await fetch('http://localhost:3000/api/get-videos');
+                const response = await fetch('/api/get-videos');
                 const videos = await response.json();
                 
                 const container = document.getElementById('video-container');
@@ -72,7 +72,7 @@
 
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`http://localhost:3000/api/delete-video/${id}`, {
+                    const response = await fetch(`/api/delete-video/${id}`, {
                         method: 'DELETE'
                     });
                     const resData = await response.json();
