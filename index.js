@@ -73,6 +73,23 @@ app.get('/api/get-videos', async (req, res) => {
     }
 });
 
+// Endpoint untuk menghapus video berdasarkan ID
+app.delete('/api/delete-video/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await pool.query('DELETE FROM story_records WHERE id = $1', [id]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Video tidak ditemukan' });
+        }
+
+        console.log(`🗑️ Video dengan ID ${id} telah dihapus`);
+        res.json({ success: true, message: 'Kenangan telah dihapus dari database' });
+    } catch (err) {
+        console.error('Error saat menghapus data:', err);
+        res.status(500).json({ error: 'Gagal menghapus data' });
+    }
+});
 // 4. Jalankan Server
 app.listen(port, () => {
     console.log(`🚀 Server on: http://localhost:${port}`);
