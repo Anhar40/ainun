@@ -3,15 +3,12 @@ import express from 'express';
 import pg from 'pg';
 import cors from 'cors';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
 dotenv.config();
 const { Pool } = pg;
 const port = 3000;
 
 const app = express();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' })); 
@@ -21,19 +18,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 // KONFIGURASI DB UNTUK VERCEL
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false // WAJIB untuk banyak provider DB cloud di Vercel
-  }
+  ssl: { rejectUnauthorized: false }
 });
 
-// Cek koneksi (Sudah Benar)
+// cek koneksi
 (async () => {
   try {
     const client = await pool.connect();
-    console.log('✅ PostgreSQL connected');
+    console.log('✅ Database connected successfully');
     client.release();
   } catch (err) {
-    console.error('❌ PostgreSQL connection error:', err.message);
+    console.error('❌ Database connection failed');
+    console.error(err.message);
   }
 })();
 
