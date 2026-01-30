@@ -1,21 +1,23 @@
-import dotenv from 'dotenv';
-import express from 'express';
-import pg from 'pg';
-import cors from 'cors';
-import path from 'path';
+// KONFIGURASI DB UNTUK VERCEL
+const express = require('express');
+const { Pool } = require('pg');
+const cors = require('cors');
+const path = require('path');
+require('dotenv').config();
 
-dotenv.config();
-const { Pool } = pg;
-const port = 3000;
 
 const app = express();
-
-app.use(cors());
-app.use(express.json({ limit: '50mb' })); 
+const port = 3000;
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+// Middleware
+app.use(express.json({ limit: '50mb' })); 
+app.use(cors());
+
+// RENDER PUBLIC FOLDER: Agar file HTML bisa diakses langsung
 app.use(express.static(path.join(__dirname, 'public')));
 
-// KONFIGURASI DB UNTUK VERCEL
+// Konfigurasi PostgreSQL
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
